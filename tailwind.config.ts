@@ -61,7 +61,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				lunar: 'hsl(var(--lunar))',
+				space: 'hsl(var(--space))',
+				star: 'hsl(var(--star))',
+				'moon-glow': 'hsl(var(--moon-glow))',
+				visible: 'hsl(var(--visible))',
+				hidden: 'hsl(var(--hidden))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
