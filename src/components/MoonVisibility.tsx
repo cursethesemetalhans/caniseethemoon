@@ -219,7 +219,7 @@ const MoonVisibility = () => {
         </Card>
 
         {/* Moon Details Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Phase */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
