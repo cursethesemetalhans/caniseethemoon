@@ -63,8 +63,9 @@ const MoonVisibility = () => {
     const altitudeDegrees = moonPosition.altitude * (180 / Math.PI);
     const azimuthDegrees = moonPosition.azimuth * (180 / Math.PI);
 
-    // Normalize azimuth to 0-360 degrees
-    const normalizedAzimuth = azimuthDegrees < 0 ? azimuthDegrees + 360 : azimuthDegrees;
+    // Convert from SunCalc's south-based azimuth (0° = South) to standard north-based azimuth (0° = North)
+    // and normalize to 0-360 degrees
+    const normalizedAzimuth = (azimuthDegrees + 180) % 360;
 
     // Moon is visible if it's above the horizon (altitude > 0)
     const isVisible = altitudeDegrees > 0;
