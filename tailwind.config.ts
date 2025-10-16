@@ -20,6 +20,7 @@ export default {
 		extend: {
 			fontFamily: {
 				'space': ['Space Mono', 'monospace'],
+				'doto': ['Doto', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
