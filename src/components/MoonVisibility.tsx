@@ -191,12 +191,12 @@ const MoonVisibility = () => {
                 {moonData.isVisible ? (
                   <Eye className="w-8 h-8 text-visible" />
                 ) : (
-                  <EyeOff className="w-8 h-8 text-hidden" />
+                  <EyeOff className="w-8 h-8 text-muted-foreground" />
                 )}
               </div>
               
               <div className="space-y-2">
-                <div className={`text-6xl font-bold font-doto ${moonData.isVisible ? 'text-visible' : 'text-hidden'}`}>
+                <div className={`text-6xl font-bold font-doto ${moonData.isVisible ? 'text-visible' : 'text-muted-foreground'}`}>
                   {moonData.isVisible ? 'YES' : 'NO'}
                 </div>
                 <p className="text-xl text-muted-foreground">
