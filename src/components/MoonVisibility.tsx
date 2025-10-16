@@ -283,7 +283,7 @@ const MoonVisibility = () => {
         </div>
 
         {/* Buy Me a Coffee */}
-        <div className="text-center pb-4">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
           <a 
             href="https://buymeacoffee.com/jamieharrington" 
             target="_blank" 
