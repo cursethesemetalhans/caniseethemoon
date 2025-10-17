@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset } from 'lucide-react';
+import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass } from 'lucide-react';
 import * as SunCalc from 'suncalc';
 
 interface MoonData {
@@ -238,7 +238,7 @@ const MoonVisibility = () => {
           {/* Position */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
-              <MapPin className="w-8 h-8 mx-auto text-muted-foreground" />
+              <Compass className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Position</div>
                 <div className="font-semibold">
