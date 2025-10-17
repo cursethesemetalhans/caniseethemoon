@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset } from 'lucide-react';
 import * as SunCalc from 'suncalc';
 
 interface MoonData {
@@ -224,7 +224,7 @@ const MoonVisibility = () => {
           {/* Phase */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
-              <div className="text-2xl">🌙</div>
+              <Moon className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Moon Phase</div>
                 <div className="font-semibold">{getMoonPhaseDescription(moonData.phase)}</div>
@@ -238,7 +238,7 @@ const MoonVisibility = () => {
           {/* Position */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
-              <div className="text-2xl">📍</div>
+              <MapPin className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Position</div>
                 <div className="font-semibold">
@@ -254,7 +254,7 @@ const MoonVisibility = () => {
           {/* Moonrise */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
-              <div className="text-2xl">🌅</div>
+              <Sunrise className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Moonrise</div>
                 <div className="font-semibold">{formatTime(moonData.rise)}</div>
@@ -265,7 +265,7 @@ const MoonVisibility = () => {
           {/* Moonset */}
           <Card className="bg-card/20 backdrop-blur border-border/50">
             <CardContent className="p-4 text-center space-y-2">
-              <div className="text-2xl">🌇</div>
+              <Sunset className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
                 <div className="text-sm text-muted-foreground">Moonset</div>
                 <div className="font-semibold">{formatTime(moonData.set)}</div>
