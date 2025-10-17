@@ -1,8 +1,32 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass } from 'lucide-react';
+import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass, Navigation } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import * as SunCalc from 'suncalc';
+
+const MAJOR_CITIES = [
+  { name: 'Current Location', latitude: 0, longitude: 0, value: 'current' },
+  { name: 'London, UK', latitude: 51.5074, longitude: -0.1278, value: 'london' },
+  { name: 'New York, USA', latitude: 40.7128, longitude: -74.0060, value: 'newyork' },
+  { name: 'Tokyo, Japan', latitude: 35.6762, longitude: 139.6503, value: 'tokyo' },
+  { name: 'Paris, France', latitude: 48.8566, longitude: 2.3522, value: 'paris' },
+  { name: 'Sydney, Australia', latitude: -33.8688, longitude: 151.2093, value: 'sydney' },
+  { name: 'Dubai, UAE', latitude: 25.2048, longitude: 55.2708, value: 'dubai' },
+  { name: 'Singapore', latitude: 1.3521, longitude: 103.8198, value: 'singapore' },
+  { name: 'Hong Kong', latitude: 22.3193, longitude: 114.1694, value: 'hongkong' },
+  { name: 'Mumbai, India', latitude: 19.0760, longitude: 72.8777, value: 'mumbai' },
+  { name: 'São Paulo, Brazil', latitude: -23.5505, longitude: -46.6333, value: 'saopaulo' },
+  { name: 'Cairo, Egypt', latitude: 30.0444, longitude: 31.2357, value: 'cairo' },
+  { name: 'Moscow, Russia', latitude: 55.7558, longitude: 37.6173, value: 'moscow' },
+  { name: 'Los Angeles, USA', latitude: 34.0522, longitude: -118.2437, value: 'losangeles' },
+  { name: 'Berlin, Germany', latitude: 52.5200, longitude: 13.4050, value: 'berlin' },
+  { name: 'Toronto, Canada', latitude: 43.6532, longitude: -79.3832, value: 'toronto' },
+  { name: 'Mexico City, Mexico', latitude: 19.4326, longitude: -99.1332, value: 'mexicocity' },
+  { name: 'Beijing, China', latitude: 39.9042, longitude: 116.4074, value: 'beijing' },
+  { name: 'Bangkok, Thailand', latitude: 13.7563, longitude: 100.5018, value: 'bangkok' },
+  { name: 'Istanbul, Turkey', latitude: 41.0082, longitude: 28.9784, value: 'istanbul' },
+];
 
 interface MoonData {
   isVisible: boolean;
@@ -26,6 +50,8 @@ const MoonVisibility = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [isCurrentLocation, setIsCurrentLocation] = useState(true);
+  const [selectedCity, setSelectedCity] = useState('current');
 
   const getMoonPhaseDescription = (phase: number): string => {
     if (phase < 0.03 || phase > 0.97) return 'New Moon';
@@ -114,6 +140,35 @@ const MoonVisibility = () => {
     });
   };
 
+  const handleCityChange = async (value: string) => {
+    setSelectedCity(value);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      if (value === 'current') {
+        const locationData = await getCurrentLocation();
+        setLocation(locationData);
+        setIsCurrentLocation(true);
+        const data = calculateMoonData(locationData.latitude, locationData.longitude);
+        setMoonData(data);
+      } else {
+        const city = MAJOR_CITIES.find(c => c.value === value);
+        if (city) {
+          setLocation({ latitude: city.latitude, longitude: city.longitude, city: city.name });
+          setIsCurrentLocation(false);
+          const data = calculateMoonData(city.latitude, city.longitude);
+          setMoonData(data);
+        }
+      }
+      setLastUpdated(new Date());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to get moon data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const updateMoonData = async () => {
     setLoading(true);
     setError(null);
@@ -176,9 +231,26 @@ const MoonVisibility = () => {
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-light text-muted-foreground">Can you see the moon?</h1>
           {location?.city && (
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              <span>{location.city}</span>
+            <div className="flex items-center justify-center">
+              <Select value={selectedCity} onValueChange={handleCityChange}>
+                <SelectTrigger className="w-auto border-none bg-transparent hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {isCurrentLocation ? (
+                      <Navigation className="w-4 h-4" />
+                    ) : (
+                      <MapPin className="w-4 h-4" />
+                    )}
+                    <SelectValue />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  {MAJOR_CITIES.map((city) => (
+                    <SelectItem key={city.value} value={city.value}>
+                      {city.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
         </div>
