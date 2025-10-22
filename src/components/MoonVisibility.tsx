@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass, Navigation } from 'lucide-react';
+import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass, Navigation, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import * as SunCalc from 'suncalc';
 
 const MAJOR_CITIES = [
@@ -52,6 +53,7 @@ const MoonVisibility = () => {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isCurrentLocation, setIsCurrentLocation] = useState(true);
   const [selectedCity, setSelectedCity] = useState('current');
+  const [openDialog, setOpenDialog] = useState<'phase' | 'position' | 'rise' | 'set' | null>(null);
 
   const getMoonPhaseDescription = (phase: number): string => {
     if (phase < 0.03 || phase > 0.97) return 'New Moon';
@@ -294,7 +296,10 @@ const MoonVisibility = () => {
         {/* Moon Details Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Phase */}
-          <Card className="bg-card/20 backdrop-blur border-border/50">
+          <Card 
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            onClick={() => setOpenDialog('phase')}
+          >
             <CardContent className="p-4 text-center space-y-2">
               <Moon className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
@@ -308,7 +313,10 @@ const MoonVisibility = () => {
           </Card>
 
           {/* Position */}
-          <Card className="bg-card/20 backdrop-blur border-border/50">
+          <Card 
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            onClick={() => setOpenDialog('position')}
+          >
             <CardContent className="p-4 text-center space-y-2">
               <Compass className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
@@ -324,7 +332,10 @@ const MoonVisibility = () => {
           </Card>
 
           {/* Moonrise */}
-          <Card className="bg-card/20 backdrop-blur border-border/50">
+          <Card 
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            onClick={() => setOpenDialog('rise')}
+          >
             <CardContent className="p-4 text-center space-y-2">
               <Sunrise className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
@@ -335,7 +346,10 @@ const MoonVisibility = () => {
           </Card>
 
           {/* Moonset */}
-          <Card className="bg-card/20 backdrop-blur border-border/50">
+          <Card 
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            onClick={() => setOpenDialog('set')}
+          >
             <CardContent className="p-4 text-center space-y-2">
               <Sunset className="w-8 h-8 mx-auto text-muted-foreground" />
               <div className="space-y-1">
@@ -345,6 +359,63 @@ const MoonVisibility = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Detail Dialogs */}
+        <Dialog open={openDialog === 'phase'} onOpenChange={() => setOpenDialog(null)}>
+          <DialogContent className="bg-card/95 backdrop-blur border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Moon className="w-5 h-5" />
+                Moon Phase Details
+              </DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              {/* Content will be added later */}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
+          <DialogContent className="bg-card/95 backdrop-blur border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Compass className="w-5 h-5" />
+                Position Details
+              </DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              {/* Content will be added later */}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={openDialog === 'rise'} onOpenChange={() => setOpenDialog(null)}>
+          <DialogContent className="bg-card/95 backdrop-blur border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sunrise className="w-5 h-5" />
+                Moonrise Details
+              </DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              {/* Content will be added later */}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={openDialog === 'set'} onOpenChange={() => setOpenDialog(null)}>
+          <DialogContent className="bg-card/95 backdrop-blur border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sunset className="w-5 h-5" />
+                Moonset Details
+              </DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              {/* Content will be added later */}
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Last Updated */}
         <div className="text-center text-sm text-muted-foreground">
