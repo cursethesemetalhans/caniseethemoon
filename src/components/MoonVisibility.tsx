@@ -5,6 +5,16 @@ import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import * as SunCalc from 'suncalc';
+import { 
+  WiMoonNew, 
+  WiMoonWaxingCrescent3, 
+  WiMoonFirstQuarter, 
+  WiMoonWaxingGibbous3,
+  WiMoonFull, 
+  WiMoonWaningGibbous3, 
+  WiMoonThirdQuarter, 
+  WiMoonWaningCrescent3 
+} from 'react-icons/wi';
 
 const MAJOR_CITIES = [
   { name: 'Current Location', latitude: 0, longitude: 0, value: 'current' },
@@ -79,6 +89,58 @@ const MoonVisibility = () => {
     const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
     const index = Math.round(azimuth / 22.5) % 16;
     return directions[index];
+  };
+
+  const getMoonIcon = (phase: number) => {
+    if (phase < 0.03 || phase > 0.97) return WiMoonNew;
+    if (phase < 0.22) return WiMoonWaxingCrescent3;
+    if (phase < 0.28) return WiMoonFirstQuarter;
+    if (phase < 0.47) return WiMoonWaxingGibbous3;
+    if (phase < 0.53) return WiMoonFull;
+    if (phase < 0.72) return WiMoonWaningGibbous3;
+    if (phase < 0.78) return WiMoonThirdQuarter;
+    return WiMoonWaningCrescent3;
+  };
+
+  const getMoonAge = (phase: number): number => {
+    const lunarCycle = 29.53; // days
+    return Math.round(phase * lunarCycle * 10) / 10;
+  };
+
+  const getNextMajorPhase = (currentPhase: number): { name: string; date: Date } => {
+    const lunarCycle = 29.53;
+    const now = new Date();
+    
+    // Major phases: New Moon (0), First Quarter (0.25), Full Moon (0.5), Last Quarter (0.75)
+    const phases = [
+      { value: 0, name: 'New Moon' },
+      { value: 0.25, name: 'First Quarter' },
+      { value: 0.5, name: 'Full Moon' },
+      { value: 0.75, name: 'Last Quarter' },
+      { value: 1, name: 'New Moon' }
+    ];
+    
+    // Find next major phase
+    let nextPhase = phases.find(p => p.value > currentPhase) || phases[0];
+    
+    // Calculate days until next phase
+    let daysUntil;
+    if (nextPhase.value > currentPhase) {
+      daysUntil = (nextPhase.value - currentPhase) * lunarCycle;
+    } else {
+      daysUntil = (1 - currentPhase + nextPhase.value) * lunarCycle;
+    }
+    
+    const nextDate = new Date(now.getTime() + daysUntil * 24 * 60 * 60 * 1000);
+    
+    return {
+      name: nextPhase.name,
+      date: nextDate
+    };
+  };
+
+  const formatDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
   const calculateMoonData = (lat: number, lng: number): MoonData => {
@@ -369,8 +431,40 @@ const MoonVisibility = () => {
                 Moon Phase Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-4">
-              {/* Content will be added later */}
+            <div className="py-6 space-y-6">
+              <div className="flex justify-center">
+                {moonData && (() => {
+                  const MoonIcon = getMoonIcon(moonData.phase);
+                  return <MoonIcon className="w-32 h-32 text-muted-foreground" />;
+                })()}
+              </div>
+              
+              {moonData && (
+                <div className="space-y-4 text-center">
+                  <div>
+                    <div className="text-2xl font-semibold mb-1">
+                      {getMoonPhaseDescription(moonData.phase)}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 text-muted-foreground">
+                    <div>
+                      <span className="font-medium">Illumination:</span>{' '}
+                      {(moonData.illumination * 100).toFixed(1)}%
+                    </div>
+                    
+                    <div>
+                      <span className="font-medium">Age of Moon:</span>{' '}
+                      {getMoonAge(moonData.phase)} days
+                    </div>
+                    
+                    <div>
+                      <span className="font-medium">Next {getNextMajorPhase(moonData.phase).name}:</span>{' '}
+                      {formatDate(getNextMajorPhase(moonData.phase).date)}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </DialogContent>
         </Dialog>
