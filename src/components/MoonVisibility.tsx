@@ -143,6 +143,19 @@ const MoonVisibility = () => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  const getTimeRemaining = (targetDate: Date | null): { hours: number; minutes: number } | null => {
+    if (!targetDate) return null;
+    const now = new Date();
+    const diffMs = targetDate.getTime() - now.getTime();
+    
+    if (diffMs < 0) return null; // Event has already passed
+    
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    return { hours, minutes };
+  };
+
   const calculateMoonData = (lat: number, lng: number): MoonData => {
     const now = new Date();
     const moonPosition = SunCalc.getMoonPosition(now, lat, lng);
@@ -637,8 +650,27 @@ const MoonVisibility = () => {
                 Moonrise Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-4">
-              {/* Content will be added later */}
+            <div className="py-6 text-center space-y-4">
+              {moonData && (() => {
+                const timeRemaining = getTimeRemaining(moonData.rise);
+                
+                return (
+                  <div className="space-y-4">
+                    <div className="text-2xl font-semibold">
+                      Next moonrise in:
+                    </div>
+                    {timeRemaining ? (
+                      <div className="text-5xl font-bold font-doto text-primary">
+                        {timeRemaining.hours}h : {String(timeRemaining.minutes).padStart(2, '0')}m
+                      </div>
+                    ) : (
+                      <div className="text-lg text-muted-foreground">
+                        {moonData.rise ? 'Moonrise has already occurred today' : 'No moonrise data available'}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </DialogContent>
         </Dialog>
@@ -651,8 +683,27 @@ const MoonVisibility = () => {
                 Moonset Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-4">
-              {/* Content will be added later */}
+            <div className="py-6 text-center space-y-4">
+              {moonData && (() => {
+                const timeRemaining = getTimeRemaining(moonData.set);
+                
+                return (
+                  <div className="space-y-4">
+                    <div className="text-2xl font-semibold">
+                      Next moonset in:
+                    </div>
+                    {timeRemaining ? (
+                      <div className="text-5xl font-bold font-doto text-primary">
+                        {timeRemaining.hours}h : {String(timeRemaining.minutes).padStart(2, '0')}m
+                      </div>
+                    ) : (
+                      <div className="text-lg text-muted-foreground">
+                        {moonData.set ? 'Moonset has already occurred today' : 'No moonset data available'}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </DialogContent>
         </Dialog>
