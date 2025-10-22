@@ -470,15 +470,161 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border">
+          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-md">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Compass className="w-5 h-5" />
                 Position Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-4">
-              {/* Content will be added later */}
+            <div className="py-6 space-y-6">
+              {moonData && (() => {
+                const size = 300;
+                const centerX = size / 2;
+                const centerY = size / 2;
+                const maxRadius = (size / 2) - 40;
+                
+                // Convert altitude and azimuth to x, y coordinates
+                const altitude = moonData.altitude;
+                const azimuth = moonData.azimuth;
+                
+                // Calculate radius from center (0° altitude = edge, 90° altitude = center)
+                const radiusFromCenter = altitude >= 0 ? maxRadius * (1 - altitude / 90) : maxRadius;
+                
+                // Convert azimuth to radians (0° = North/top, clockwise)
+                const angleInRadians = azimuth * (Math.PI / 180);
+                
+                // Calculate x, y position
+                const moonX = centerX + radiusFromCenter * Math.sin(angleInRadians);
+                const moonY = centerY - radiusFromCenter * Math.cos(angleInRadians);
+                
+                return (
+                  <div className="flex flex-col items-center space-y-4">
+                    <svg width={size} height={size} className="overflow-visible">
+                      {/* Background circle */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius}
+                        fill="hsl(var(--background))"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="2"
+                      />
+                      
+                      {/* Concentric circles for altitude levels (30°, 60°) */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius * 0.67}
+                        fill="none"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="1"
+                        opacity="0.3"
+                      />
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius * 0.33}
+                        fill="none"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="1"
+                        opacity="0.3"
+                      />
+                      
+                      {/* Compass direction labels */}
+                      <text
+                        x={centerX}
+                        y={centerY - maxRadius - 15}
+                        textAnchor="middle"
+                        className="fill-foreground font-semibold text-lg"
+                      >
+                        N
+                      </text>
+                      <text
+                        x={centerX + maxRadius + 15}
+                        y={centerY + 5}
+                        textAnchor="middle"
+                        className="fill-foreground font-semibold text-lg"
+                      >
+                        E
+                      </text>
+                      <text
+                        x={centerX}
+                        y={centerY + maxRadius + 25}
+                        textAnchor="middle"
+                        className="fill-foreground font-semibold text-lg"
+                      >
+                        S
+                      </text>
+                      <text
+                        x={centerX - maxRadius - 15}
+                        y={centerY + 5}
+                        textAnchor="middle"
+                        className="fill-foreground font-semibold text-lg"
+                      >
+                        W
+                      </text>
+                      
+                      {/* Moon position */}
+                      {altitude >= 0 ? (
+                        <>
+                          {/* Moon glow effect */}
+                          <circle
+                            cx={moonX}
+                            cy={moonY}
+                            r="12"
+                            fill="hsl(var(--primary))"
+                            opacity="0.3"
+                          />
+                          {/* Moon dot */}
+                          <circle
+                            cx={moonX}
+                            cy={moonY}
+                            r="8"
+                            fill="hsl(var(--primary))"
+                          />
+                        </>
+                      ) : (
+                        /* Moon below horizon - show dimmed at edge */
+                        <circle
+                          cx={moonX}
+                          cy={moonY}
+                          r="6"
+                          fill="hsl(var(--muted-foreground))"
+                          opacity="0.3"
+                        />
+                      )}
+                      
+                      {/* Center point (zenith) */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r="2"
+                        fill="hsl(var(--muted-foreground))"
+                        opacity="0.5"
+                      />
+                    </svg>
+                    
+                    {/* Position information */}
+                    <div className="space-y-2 text-center text-muted-foreground">
+                      <div>
+                        <span className="font-medium">Altitude:</span>{' '}
+                        {formatDegrees(moonData.altitude)}
+                        {moonData.altitude >= 0 ? ' above horizon' : ' below horizon'}
+                      </div>
+                      <div>
+                        <span className="font-medium">Azimuth:</span>{' '}
+                        {formatDegrees(moonData.azimuth)} ({getAzimuthDirection(moonData.azimuth)})
+                      </div>
+                      {moonData.altitude < 0 && (
+                        <div className="text-sm pt-2 text-amber-500">
+                          Moon is currently below the horizon
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </DialogContent>
         </Dialog>
