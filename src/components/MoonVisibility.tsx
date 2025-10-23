@@ -681,7 +681,7 @@ const MoonVisibility = () => {
                         <circle
                           cx={moonX}
                           cy={moonY}
-                          r="6"
+                          r="8"
                           fill="hsl(var(--muted-foreground))"
                           opacity="0.3"
                         />
