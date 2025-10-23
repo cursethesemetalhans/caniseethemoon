@@ -167,6 +167,26 @@ const MoonVisibility = () => {
     const moonIllumination = SunCalc.getMoonIllumination(now);
     const moonTimes = SunCalc.getMoonTimes(now, lat, lng);
 
+    // If moonrise/moonset has already passed today, get tomorrow's times
+    let nextRise = moonTimes.rise;
+    let nextSet = moonTimes.set;
+    
+    if (nextRise && nextRise.getTime() < now.getTime()) {
+      // Get tomorrow's moonrise
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowTimes = SunCalc.getMoonTimes(tomorrow, lat, lng);
+      nextRise = tomorrowTimes.rise;
+    }
+    
+    if (nextSet && nextSet.getTime() < now.getTime()) {
+      // Get tomorrow's moonset
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowTimes = SunCalc.getMoonTimes(tomorrow, lat, lng);
+      nextSet = tomorrowTimes.set;
+    }
+
     // Convert altitude from radians to degrees
     const altitudeDegrees = moonPosition.altitude * (180 / Math.PI);
     const azimuthDegrees = moonPosition.azimuth * (180 / Math.PI);
@@ -184,8 +204,8 @@ const MoonVisibility = () => {
       azimuth: normalizedAzimuth,
       phase: moonIllumination.phase,
       illumination: moonIllumination.fraction,
-      rise: moonTimes.rise,
-      set: moonTimes.set
+      rise: nextRise,
+      set: nextSet
     };
   };
 
@@ -677,7 +697,7 @@ const MoonVisibility = () => {
                       </div>
                     ) : (
                       <div className="text-lg text-muted-foreground">
-                        {moonData.rise ? 'Moonrise has already occurred today' : 'No moonrise data available'}
+                        No moonrise data available
                       </div>
                     )}
                   </div>
@@ -710,7 +730,7 @@ const MoonVisibility = () => {
                       </div>
                     ) : (
                       <div className="text-lg text-muted-foreground">
-                        {moonData.set ? 'Moonset has already occurred today' : 'No moonset data available'}
+                        No moonset data available
                       </div>
                     )}
                   </div>
