@@ -534,7 +534,8 @@ const MoonVisibility = () => {
                 const azimuth = moonData.azimuth;
                 
                 // Calculate radius from center (0° altitude = edge, 90° altitude = center)
-                const radiusFromCenter = altitude >= 0 ? maxRadius * (1 - altitude / 90) : maxRadius;
+                // Use absolute value for negative altitudes to show position below horizon
+                const radiusFromCenter = maxRadius * (1 - Math.abs(altitude) / 90);
                 
                 // Convert azimuth to radians (0° = North/top, clockwise)
                 const angleInRadians = azimuth * (Math.PI / 180);
