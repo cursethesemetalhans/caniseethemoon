@@ -556,11 +556,29 @@ const MoonVisibility = () => {
                         strokeWidth="2"
                       />
                       
-                      {/* Concentric circles for altitude levels (30°, 60°) */}
+                      {/* Concentric circles for altitude levels (15°, 30°, 45°, 60°, 75°) */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius * 0.83}
+                        fill="none"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="1"
+                        opacity="0.2"
+                      />
                       <circle
                         cx={centerX}
                         cy={centerY}
                         r={maxRadius * 0.67}
+                        fill="none"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="1"
+                        opacity="0.3"
+                      />
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius * 0.5}
                         fill="none"
                         stroke="hsl(var(--border))"
                         strokeWidth="1"
@@ -575,6 +593,34 @@ const MoonVisibility = () => {
                         strokeWidth="1"
                         opacity="0.3"
                       />
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={maxRadius * 0.17}
+                        fill="none"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="1"
+                        opacity="0.2"
+                      />
+                      
+                      {/* Radial lines for cardinal and intercardinal directions */}
+                      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
+                        const rad = angle * (Math.PI / 180);
+                        const x2 = centerX + maxRadius * Math.sin(rad);
+                        const y2 = centerY - maxRadius * Math.cos(rad);
+                        return (
+                          <line
+                            key={angle}
+                            x1={centerX}
+                            y1={centerY}
+                            x2={x2}
+                            y2={y2}
+                            stroke="hsl(var(--border))"
+                            strokeWidth="1"
+                            opacity="0.2"
+                          />
+                        );
+                      })}
                       
                       {/* Compass direction labels */}
                       <text
