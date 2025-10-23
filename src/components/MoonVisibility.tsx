@@ -157,6 +157,11 @@ const MoonVisibility = () => {
   };
 
   const calculateMoonData = (lat: number, lng: number): MoonData => {
+    // Validate coordinates
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      throw new Error('Invalid coordinates');
+    }
+    
     const now = new Date();
     const moonPosition = SunCalc.getMoonPosition(now, lat, lng);
     const moonIllumination = SunCalc.getMoonIllumination(now);
@@ -194,10 +199,17 @@ const MoonVisibility = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
+          
+          // Validate coordinates
+          if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+            reject(new Error('Invalid coordinates'));
+            return;
+          }
+          
           try {
-            // Try to get city name from reverse geocoding
+            // Try to get city name from reverse geocoding with encoded parameters
             const response = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&localityLanguage=en`
             );
             const data = await response.json();
             resolve({
