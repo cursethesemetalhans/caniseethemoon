@@ -469,14 +469,14 @@ const MoonVisibility = () => {
 
         {/* Detail Dialogs */}
         <Dialog open={openDialog === 'phase'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border">
+          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Moon className="w-5 h-5" />
                 Moon Phase Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-6 space-y-6">
+            <div className="py-6 space-y-6 text-center">
               <div className="flex justify-center">
                 {moonData && (() => {
                   const MoonIcon = getMoonIcon(moonData.phase);
@@ -485,7 +485,7 @@ const MoonVisibility = () => {
               </div>
               
               {moonData && (
-                <div className="space-y-4 text-center">
+                <div className="space-y-4">
                   <div>
                     <div className="text-2xl font-semibold mb-1">
                       {getMoonPhaseDescription(moonData.phase)}
@@ -515,7 +515,7 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-md">
+          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Compass className="w-5 h-5" />
@@ -722,14 +722,14 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'rise'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border">
+          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Sunrise className="w-5 h-5" />
                 Moonrise Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-6 text-center space-y-4">
+            <div className="py-6 text-center space-y-6">
               {moonData && (() => {
                 const timeRemaining = getTimeRemaining(moonData.rise);
                 
@@ -755,14 +755,14 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'set'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border">
+          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Sunset className="w-5 h-5" />
                 Moonset Details
               </DialogTitle>
             </DialogHeader>
-            <div className="py-6 text-center space-y-4">
+            <div className="py-6 text-center space-y-6">
               {moonData && (() => {
                 const timeRemaining = getTimeRemaining(moonData.set);
                 
