@@ -404,7 +404,7 @@ const MoonVisibility = () => {
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Phase */}
           <Card 
-            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => setOpenDialog('phase')}
           >
             <CardContent className="p-4 text-center space-y-2">
@@ -421,7 +421,7 @@ const MoonVisibility = () => {
 
           {/* Position */}
           <Card 
-            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => setOpenDialog('position')}
           >
             <CardContent className="p-4 text-center space-y-2">
@@ -440,7 +440,7 @@ const MoonVisibility = () => {
 
           {/* Moonrise */}
           <Card 
-            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => setOpenDialog('rise')}
           >
             <CardContent className="p-4 text-center space-y-2">
@@ -454,7 +454,7 @@ const MoonVisibility = () => {
 
           {/* Moonset */}
           <Card 
-            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-card/30 transition-colors"
+            className="bg-card/20 backdrop-blur border-border/50 cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => setOpenDialog('set')}
           >
             <CardContent className="p-4 text-center space-y-2">
