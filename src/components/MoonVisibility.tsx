@@ -167,24 +167,34 @@ const MoonVisibility = () => {
     const moonIllumination = SunCalc.getMoonIllumination(now);
     const moonTimes = SunCalc.getMoonTimes(now, lat, lng);
 
-    // If moonrise/moonset has already passed today, get tomorrow's times
+    // Find next moonrise and moonset, looking up to 7 days ahead if needed
     let nextRise = moonTimes.rise;
     let nextSet = moonTimes.set;
     
-    if (nextRise && nextRise.getTime() < now.getTime()) {
-      // Get tomorrow's moonrise
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowTimes = SunCalc.getMoonTimes(tomorrow, lat, lng);
-      nextRise = tomorrowTimes.rise;
+    // Search for next moonrise
+    if (!nextRise || nextRise.getTime() < now.getTime()) {
+      for (let i = 1; i <= 7; i++) {
+        const futureDate = new Date(now);
+        futureDate.setDate(futureDate.getDate() + i);
+        const futureTimes = SunCalc.getMoonTimes(futureDate, lat, lng);
+        if (futureTimes.rise && futureTimes.rise.getTime() > now.getTime()) {
+          nextRise = futureTimes.rise;
+          break;
+        }
+      }
     }
     
-    if (nextSet && nextSet.getTime() < now.getTime()) {
-      // Get tomorrow's moonset
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowTimes = SunCalc.getMoonTimes(tomorrow, lat, lng);
-      nextSet = tomorrowTimes.set;
+    // Search for next moonset
+    if (!nextSet || nextSet.getTime() < now.getTime()) {
+      for (let i = 1; i <= 7; i++) {
+        const futureDate = new Date(now);
+        futureDate.setDate(futureDate.getDate() + i);
+        const futureTimes = SunCalc.getMoonTimes(futureDate, lat, lng);
+        if (futureTimes.set && futureTimes.set.getTime() > now.getTime()) {
+          nextSet = futureTimes.set;
+          break;
+        }
+      }
     }
 
     // Convert altitude from radians to degrees
