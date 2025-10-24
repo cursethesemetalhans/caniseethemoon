@@ -7,13 +7,32 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import * as SunCalc from 'suncalc';
 import { 
   WiMoonNew, 
-  WiMoonWaxingCrescent3, 
+  WiMoonWaxingCrescent1,
+  WiMoonWaxingCrescent2,
+  WiMoonWaxingCrescent3,
+  WiMoonWaxingCrescent4,
+  WiMoonWaxingCrescent5,
   WiMoonFirstQuarter, 
+  WiMoonWaxingGibbous1,
+  WiMoonWaxingGibbous2,
   WiMoonWaxingGibbous3,
+  WiMoonWaxingGibbous4,
+  WiMoonWaxingGibbous5,
+  WiMoonWaxingGibbous6,
   WiMoonFull, 
-  WiMoonWaningGibbous3, 
+  WiMoonWaningGibbous1,
+  WiMoonWaningGibbous2,
+  WiMoonWaningGibbous3,
+  WiMoonWaningGibbous4,
+  WiMoonWaningGibbous5,
+  WiMoonWaningGibbous6,
   WiMoonThirdQuarter, 
-  WiMoonWaningCrescent3 
+  WiMoonWaningCrescent1,
+  WiMoonWaningCrescent2,
+  WiMoonWaningCrescent3,
+  WiMoonWaningCrescent4,
+  WiMoonWaningCrescent5,
+  WiMoonWaningCrescent6
 } from 'react-icons/wi';
 
 const MAJOR_CITIES = [
@@ -92,14 +111,48 @@ const MoonVisibility = () => {
   };
 
   const getMoonIcon = (phase: number) => {
+    // New Moon (0.00)
     if (phase < 0.03 || phase > 0.97) return WiMoonNew;
-    if (phase < 0.22) return WiMoonWaxingCrescent3;
+    
+    // Waxing Crescent (0.03 - 0.22) - only 5 variants available
+    if (phase < 0.07) return WiMoonWaxingCrescent1;
+    if (phase < 0.11) return WiMoonWaxingCrescent2;
+    if (phase < 0.15) return WiMoonWaxingCrescent3;
+    if (phase < 0.19) return WiMoonWaxingCrescent4;
+    if (phase < 0.22) return WiMoonWaxingCrescent5;
+    
+    // First Quarter (0.25)
     if (phase < 0.28) return WiMoonFirstQuarter;
-    if (phase < 0.47) return WiMoonWaxingGibbous3;
+    
+    // Waxing Gibbous (0.28 - 0.47)
+    if (phase < 0.31) return WiMoonWaxingGibbous1;
+    if (phase < 0.34) return WiMoonWaxingGibbous2;
+    if (phase < 0.38) return WiMoonWaxingGibbous3;
+    if (phase < 0.41) return WiMoonWaxingGibbous4;
+    if (phase < 0.44) return WiMoonWaxingGibbous5;
+    if (phase < 0.47) return WiMoonWaxingGibbous6;
+    
+    // Full Moon (0.50)
     if (phase < 0.53) return WiMoonFull;
-    if (phase < 0.72) return WiMoonWaningGibbous3;
+    
+    // Waning Gibbous (0.53 - 0.72)
+    if (phase < 0.56) return WiMoonWaningGibbous1;
+    if (phase < 0.59) return WiMoonWaningGibbous2;
+    if (phase < 0.63) return WiMoonWaningGibbous3;
+    if (phase < 0.66) return WiMoonWaningGibbous4;
+    if (phase < 0.69) return WiMoonWaningGibbous5;
+    if (phase < 0.72) return WiMoonWaningGibbous6;
+    
+    // Third Quarter (0.75)
     if (phase < 0.78) return WiMoonThirdQuarter;
-    return WiMoonWaningCrescent3;
+    
+    // Waning Crescent (0.78 - 0.97)
+    if (phase < 0.81) return WiMoonWaningCrescent1;
+    if (phase < 0.84) return WiMoonWaningCrescent2;
+    if (phase < 0.88) return WiMoonWaningCrescent3;
+    if (phase < 0.91) return WiMoonWaningCrescent4;
+    if (phase < 0.94) return WiMoonWaningCrescent5;
+    return WiMoonWaningCrescent6;
   };
 
   const getMoonAge = (phase: number): number => {
