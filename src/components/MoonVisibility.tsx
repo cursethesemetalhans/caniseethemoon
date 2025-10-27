@@ -192,6 +192,38 @@ const MoonVisibility = () => {
     };
   };
 
+  const getNextFullMoon = (currentPhase: number): Date => {
+    const lunarCycle = 29.53;
+    const now = new Date();
+    const fullMoonPhase = 0.5;
+    
+    let daysUntil;
+    if (fullMoonPhase > currentPhase) {
+      daysUntil = (fullMoonPhase - currentPhase) * lunarCycle;
+    } else {
+      daysUntil = (1 - currentPhase + fullMoonPhase) * lunarCycle;
+    }
+    
+    return new Date(now.getTime() + daysUntil * 24 * 60 * 60 * 1000);
+  };
+
+  const getNextNewMoon = (currentPhase: number): Date => {
+    const lunarCycle = 29.53;
+    const now = new Date();
+    const newMoonPhase = 0;
+    
+    let daysUntil;
+    if (currentPhase < 0.03) {
+      // Very close to new moon, calculate next cycle
+      daysUntil = lunarCycle;
+    } else {
+      // Calculate days until next new moon (end of cycle)
+      daysUntil = (1 - currentPhase) * lunarCycle;
+    }
+    
+    return new Date(now.getTime() + daysUntil * 24 * 60 * 60 * 1000);
+  };
+
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
@@ -569,6 +601,16 @@ const MoonVisibility = () => {
                     <div>
                       <span className="font-medium">Next phase, {getNextMajorPhase(moonData.phase).name}:</span>{' '}
                       {formatDate(getNextMajorPhase(moonData.phase).date)}
+                    </div>
+
+                    <div>
+                      <span className="font-medium">Next Full Moon:</span>{' '}
+                      {formatDate(getNextFullMoon(moonData.phase))}
+                    </div>
+
+                    <div>
+                      <span className="font-medium">Next New Moon:</span>{' '}
+                      {formatDate(getNextNewMoon(moonData.phase))}
                     </div>
                   </div>
                 </div>
