@@ -472,7 +472,7 @@ const MoonVisibility = () => {
               </div>
               
               <div className="space-y-2">
-                <div className={`text-6xl font-bold font-doto ${moonData.isVisible ? 'text-visible' : 'text-muted-foreground'}`}>
+                <div className={`text-9xl font-bold font-doto ${moonData.isVisible ? 'text-visible' : 'text-muted-foreground'}`}>
                   {moonData.isVisible ? 'YES' : 'NO'}
                 </div>
                 <p className="text-xl text-muted-foreground">
