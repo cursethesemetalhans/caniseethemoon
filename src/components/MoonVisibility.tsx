@@ -597,7 +597,7 @@ const MoonVisibility = () => {
                       <span className="font-medium">Age of Moon:</span>{' '}
                       {getMoonAge(moonData.phase)} days
                     </div>
-                    
+                    {/*
                     <div>
                       <span className="font-medium">Next {getNextMajorPhase(moonData.phase).name}:</span>{' '}
                       {formatDate(getNextMajorPhase(moonData.phase).date)}
@@ -612,6 +612,7 @@ const MoonVisibility = () => {
                       <span className="font-medium">Next New Moon:</span>{' '}
                       {formatDate(getNextNewMoon(moonData.phase))}
                     </div>
+                    */}
                   </div>
                 </div>
               )}
