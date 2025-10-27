@@ -324,7 +324,7 @@ const MoonVisibility = () => {
           try {
             // Try to get city name from reverse geocoding with encoded parameters
             const response = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&localityLanguage=en`
+              `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&localityLanguage=en`
             );
             const data = await response.json();
             resolve({
