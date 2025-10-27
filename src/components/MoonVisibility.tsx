@@ -912,7 +912,7 @@ const MoonVisibility = () => {
               variant="outline" 
               className="bg-card/20 backdrop-blur border-border/50 hover:bg-card/30"
             >
-              Buy me a coffee
+              🌚
             </Button>
           </a>
         </div>
