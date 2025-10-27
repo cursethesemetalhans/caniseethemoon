@@ -326,6 +326,13 @@ const MoonVisibility = () => {
             const response = await fetch(
               `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&localityLanguage=en`
             );
+            
+            if (!response.ok) {
+              // API error - just use coordinates without city name
+              resolve({ latitude, longitude });
+              return;
+            }
+            
             const data = await response.json();
             resolve({
               latitude,
