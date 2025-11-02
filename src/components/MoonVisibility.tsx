@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MapPin, Clock, Eye, EyeOff, RefreshCw, Moon, Sunrise, Sunset, Compass, Navigation, X } from 'lucide-react';
@@ -85,6 +85,7 @@ const MoonVisibility = () => {
   const [openDialog, setOpenDialog] = useState<'phase' | 'position' | 'rise' | 'set' | null>(null);
   const [deviceHeading, setDeviceHeading] = useState<number | null>(null);
   const [orientationEnabled, setOrientationEnabled] = useState(false);
+  const smoothedHeadingRef = useRef<number | null>(null);
 
   const getMoonPhaseDescription = (phase: number): string => {
     if (phase < 0.03 || phase > 0.97) return 'New Moon';
@@ -425,7 +426,20 @@ const MoonVisibility = () => {
       if (heading !== null) {
         // Add 90-degree offset and normalize to 0-360 range
         heading = (heading + 90) % 360;
-        setDeviceHeading(heading);
+        
+        // Apply exponential moving average for smoothing (alpha = 0.15 for heavy smoothing)
+        if (smoothedHeadingRef.current === null) {
+          smoothedHeadingRef.current = heading;
+        } else {
+          // Handle wrap-around at 0/360 degrees
+          let delta = heading - smoothedHeadingRef.current;
+          if (delta > 180) delta -= 360;
+          if (delta < -180) delta += 360;
+          
+          smoothedHeadingRef.current = (smoothedHeadingRef.current + delta * 0.15 + 360) % 360;
+        }
+        
+        setDeviceHeading(Math.round(smoothedHeadingRef.current));
       }
     };
 
@@ -717,15 +731,15 @@ const MoonVisibility = () => {
                 const moonX = centerX + radiusFromCenter * Math.sin(angleInRadians);
                 const moonY = centerY - radiusFromCenter * Math.cos(angleInRadians);
                 
-                // Calculate rotation to align compass with device heading (negative for correct direction)
-                const rotation = orientationEnabled && deviceHeading !== null ? -deviceHeading : 0;
+                // Calculate rotation to align compass with device heading
+                const rotation = orientationEnabled && deviceHeading !== null ? deviceHeading : 0;
                 
                 return (
                   <div className="flex flex-col items-center space-y-4">
                     <svg 
                       width={size} 
                       height={size} 
-                      className="overflow-visible transition-transform duration-300"
+                      className="overflow-visible transition-transform duration-500 ease-out"
                       style={{ transform: `rotate(${rotation}deg)` }}
                     >
                       {/* Background circle */}
@@ -886,7 +900,7 @@ const MoonVisibility = () => {
                         {orientationEnabled ? ' (live)' : ' (paused)'}
                       </div>
                       <div className="text-xs opacity-70">
-                        Applied rotation: {orientationEnabled && deviceHeading !== null ? `${Math.round(-deviceHeading)}°` : '0°'}
+                        Applied rotation: {orientationEnabled && deviceHeading !== null ? `${Math.round(deviceHeading)}°` : '0°'}
                       </div>
                     </div>
                     
