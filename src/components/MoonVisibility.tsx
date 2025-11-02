@@ -83,6 +83,8 @@ const MoonVisibility = () => {
   const [isCurrentLocation, setIsCurrentLocation] = useState(true);
   const [selectedCity, setSelectedCity] = useState('current');
   const [openDialog, setOpenDialog] = useState<'phase' | 'position' | 'rise' | 'set' | null>(null);
+  const [deviceHeading, setDeviceHeading] = useState<number | null>(null);
+  const [orientationEnabled, setOrientationEnabled] = useState(false);
 
   const getMoonPhaseDescription = (phase: number): string => {
     if (phase < 0.03 || phase > 0.97) return 'New Moon';
@@ -400,6 +402,46 @@ const MoonVisibility = () => {
     return () => clearInterval(interval);
   }, [location]);
 
+  // Device orientation listener for mobile compass
+  useEffect(() => {
+    if (!orientationEnabled) {
+      setDeviceHeading(null);
+      return;
+    }
+
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      // Use alpha for compass heading (0-360 degrees)
+      if (event.alpha !== null) {
+        // Normalize to 0-360 and invert because alpha increases counter-clockwise
+        const heading = 360 - event.alpha;
+        setDeviceHeading(heading % 360);
+      }
+    };
+
+    // Request permission for iOS 13+ devices
+    const requestPermission = async () => {
+      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+        try {
+          const permission = await (DeviceOrientationEvent as any).requestPermission();
+          if (permission === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          }
+        } catch (error) {
+          console.error('Error requesting device orientation permission:', error);
+        }
+      } else {
+        // Non-iOS devices
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    };
+
+    requestPermission();
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
+  }, [orientationEnabled]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-space to-background flex items-center justify-center">
@@ -623,9 +665,20 @@ const MoonVisibility = () => {
         <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
           <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Compass className="w-5 h-5" />
-                Position Details
+              <DialogTitle className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Compass className="w-5 h-5" />
+                  Position Details
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOrientationEnabled(!orientationEnabled)}
+                  className="text-xs"
+                >
+                  <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
+                  {orientationEnabled ? 'Compass On' : 'Compass Off'}
+                </Button>
               </DialogTitle>
             </DialogHeader>
             <div className="py-6 space-y-6">
@@ -650,9 +703,17 @@ const MoonVisibility = () => {
                 const moonX = centerX + radiusFromCenter * Math.sin(angleInRadians);
                 const moonY = centerY - radiusFromCenter * Math.cos(angleInRadians);
                 
+                // Calculate rotation based on device heading
+                const rotation = orientationEnabled && deviceHeading !== null ? -deviceHeading : 0;
+                
                 return (
                   <div className="flex flex-col items-center space-y-4">
-                    <svg width={size} height={size} className="overflow-visible">
+                    <svg 
+                      width={size} 
+                      height={size} 
+                      className="overflow-visible transition-transform duration-300"
+                      style={{ transform: `rotate(${rotation}deg)` }}
+                    >
                       {/* Background circle */}
                       <circle
                         cx={centerX}
