@@ -423,8 +423,8 @@ const MoonVisibility = () => {
       }
 
       if (heading !== null) {
-        // Add 180-degree offset and normalize to 0-360 range
-        heading = (heading + 180) % 360;
+        // Add 90-degree offset and normalize to 0-360 range
+        heading = (heading + 90) % 360;
         setDeviceHeading(heading);
       }
     };
