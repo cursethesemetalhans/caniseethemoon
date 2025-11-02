@@ -876,6 +876,18 @@ const MoonVisibility = () => {
                       />
                     </svg>
                     
+                    {/* Compass debug */}
+                    <div className="text-center text-muted-foreground text-sm">
+                      <div>
+                        <span className="font-medium">Device heading:</span>{' '}
+                        {deviceHeading !== null ? formatDegrees(deviceHeading) : '—'}
+                        {orientationEnabled ? ' (live)' : ' (paused)'}
+                      </div>
+                      <div className="text-xs opacity-70">
+                        Applied rotation: {orientationEnabled && deviceHeading !== null ? `${Math.round(-deviceHeading)}°` : '0°'}
+                      </div>
+                    </div>
+                    
                     {/* Position information */}
                     <div className="space-y-2 text-center text-muted-foreground">
                       <div>
