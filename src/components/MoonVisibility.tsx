@@ -418,10 +418,8 @@ const MoonVisibility = () => {
       } 
       // Android and other devices using alpha
       else if (event.alpha !== null) {
-        // Alpha gives rotation around z-axis, 0-360
-        // When device points north, alpha should be 0
-        // We need to account for the device being held in portrait mode
-        heading = event.alpha;
+        // Correct formula for Android: abs(alpha - 360)
+        heading = Math.abs(event.alpha - 360);
       }
 
       if (heading !== null) {
@@ -717,8 +715,8 @@ const MoonVisibility = () => {
                 const moonX = centerX + radiusFromCenter * Math.sin(angleInRadians);
                 const moonY = centerY - radiusFromCenter * Math.cos(angleInRadians);
                 
-                // Calculate rotation to align compass with device heading
-                const rotation = orientationEnabled && deviceHeading !== null ? deviceHeading : 0;
+                // Calculate rotation to align compass with device heading (negative for correct direction)
+                const rotation = orientationEnabled && deviceHeading !== null ? -deviceHeading : 0;
                 
                 return (
                   <div className="flex flex-col items-center space-y-4">
