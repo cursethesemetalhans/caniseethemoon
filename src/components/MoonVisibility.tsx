@@ -410,11 +410,22 @@ const MoonVisibility = () => {
     }
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      // Use alpha for compass heading (0-360 degrees)
-      if (event.alpha !== null) {
-        // Normalize to 0-360 and invert because alpha increases counter-clockwise
-        const heading = 360 - event.alpha;
-        setDeviceHeading(heading % 360);
+      let heading: number | null = null;
+
+      // iOS devices with webkitCompassHeading (true heading)
+      if ((event as any).webkitCompassHeading !== undefined) {
+        heading = (event as any).webkitCompassHeading;
+      } 
+      // Android and other devices using alpha
+      else if (event.alpha !== null) {
+        // Alpha gives rotation around z-axis, 0-360
+        // When device points north, alpha should be 0
+        // We need to account for the device being held in portrait mode
+        heading = event.alpha;
+      }
+
+      if (heading !== null) {
+        setDeviceHeading(heading);
       }
     };
 
@@ -424,13 +435,15 @@ const MoonVisibility = () => {
         try {
           const permission = await (DeviceOrientationEvent as any).requestPermission();
           if (permission === 'granted') {
+            window.addEventListener('deviceorientationabsolute', handleOrientation, true);
             window.addEventListener('deviceorientation', handleOrientation);
           }
         } catch (error) {
           console.error('Error requesting device orientation permission:', error);
         }
       } else {
-        // Non-iOS devices
+        // Non-iOS devices - try absolute first, fallback to regular
+        window.addEventListener('deviceorientationabsolute', handleOrientation, true);
         window.addEventListener('deviceorientation', handleOrientation);
       }
     };
@@ -438,6 +451,7 @@ const MoonVisibility = () => {
     requestPermission();
 
     return () => {
+      window.removeEventListener('deviceorientationabsolute', handleOrientation, true);
       window.removeEventListener('deviceorientation', handleOrientation);
     };
   }, [orientationEnabled]);
@@ -703,8 +717,8 @@ const MoonVisibility = () => {
                 const moonX = centerX + radiusFromCenter * Math.sin(angleInRadians);
                 const moonY = centerY - radiusFromCenter * Math.cos(angleInRadians);
                 
-                // Calculate rotation based on device heading
-                const rotation = orientationEnabled && deviceHeading !== null ? -deviceHeading : 0;
+                // Calculate rotation to align compass with device heading
+                const rotation = orientationEnabled && deviceHeading !== null ? deviceHeading : 0;
                 
                 return (
                   <div className="flex flex-col items-center space-y-4">
