@@ -921,16 +921,20 @@ const MoonVisibility = () => {
                         <div className="text-sm pt-2 text-amber-500">
                           Moon is currently below the horizon
                         </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOrientationEnabled(!orientationEnabled)}
-                          className="text-xs md:hidden"
-                        >
-                          <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
-                          {orientationEnabled ? 'Compass On' : 'Compass Off'}
-                        </Button>
                       )}
+                    </div>
+                    
+                    {/* Compass button */}
+                    <div className="flex justify-center pt-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setOrientationEnabled(!orientationEnabled)}
+                        className="text-xs md:hidden"
+                      >
+                        <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
+                        {orientationEnabled ? 'Compass On' : 'Compass Off'}
+                      </Button>
                     </div>
                   </div>
                 );
