@@ -426,7 +426,7 @@ const MoonVisibility = () => {
 
       if (heading !== null) {
         // Add 90-degree offset and normalize to 0-360 range
-        heading = (heading + 90) % 360;
+        heading = heading % 360;
         
         // Apply exponential moving average for smoothing (alpha = 0.15 for heavy smoothing)
         if (smoothedHeadingRef.current === null) {
