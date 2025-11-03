@@ -930,7 +930,7 @@ const MoonVisibility = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => setOrientationEnabled(!orientationEnabled)}
-                        className="text-xs md:hidden"
+                        className="text-xs md:hidden hover:bg-background hover:text-foreground"
                       >
                         <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
                         {orientationEnabled ? 'Compass On' : 'Compass Off'}
