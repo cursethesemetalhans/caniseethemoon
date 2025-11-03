@@ -431,7 +431,10 @@ const MoonVisibility = () => {
         // Apply exponential moving average for smoothing (alpha = 0.15 for heavy smoothing)
         if (smoothedHeadingRef.current === null) {
           smoothedHeadingRef.current = heading;
-          cumulativeRotationRef.current = heading;
+          // Choose the shortest rotation path from 0
+          const option1 = heading;
+          const option2 = heading - 360;
+          cumulativeRotationRef.current = Math.abs(option1) < Math.abs(option2) ? option1 : option2;
         } else {
           // Handle wrap-around at 0/360 degrees
           let delta = heading - smoothedHeadingRef.current;
