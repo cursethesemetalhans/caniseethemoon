@@ -538,7 +538,7 @@ const MoonVisibility = () => {
         </div>
 
         {/* Main Answer */}
-        <Card className="bg-card/30 backdrop-blur border-border/50 overflow-hidden">
+        <Card className="bg-card/0 backdrop-blur border-border/50 overflow-hidden">
           <CardContent className="p-8 text-center">
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-4">
