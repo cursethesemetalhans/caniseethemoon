@@ -642,7 +642,7 @@ const MoonVisibility = () => {
 
         {/* Detail Dialogs */}
         <Dialog open={openDialog === 'phase'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
+          <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Moon className="w-5 h-5" />
