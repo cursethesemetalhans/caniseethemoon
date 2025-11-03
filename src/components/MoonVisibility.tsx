@@ -699,7 +699,7 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
+          <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -944,7 +944,7 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'rise'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
+          <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Sunrise className="w-5 h-5" />
@@ -977,7 +977,7 @@ const MoonVisibility = () => {
         </Dialog>
 
         <Dialog open={openDialog === 'set'} onOpenChange={() => setOpenDialog(null)}>
-          <DialogContent className="bg-card/95 backdrop-blur border-border max-w-lg">
+          <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Sunset className="w-5 h-5" />
