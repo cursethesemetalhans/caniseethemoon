@@ -706,15 +706,7 @@ const MoonVisibility = () => {
                   <Compass className="w-5 h-5" />
                   Position Details
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOrientationEnabled(!orientationEnabled)}
-                  className="text-xs md:hidden"
-                >
-                  <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
-                  {orientationEnabled ? 'Compass On' : 'Compass Off'}
-                </Button>
+
               </DialogTitle>
             </DialogHeader>
             <div className="py-6 space-y-6">
@@ -929,6 +921,15 @@ const MoonVisibility = () => {
                         <div className="text-sm pt-2 text-amber-500">
                           Moon is currently below the horizon
                         </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOrientationEnabled(!orientationEnabled)}
+                          className="text-xs md:hidden"
+                        >
+                          <Navigation className={`w-4 h-4 mr-1 ${orientationEnabled ? 'text-primary' : ''}`} />
+                          {orientationEnabled ? 'Compass On' : 'Compass Off'}
+                        </Button>
                       )}
                     </div>
                   </div>
