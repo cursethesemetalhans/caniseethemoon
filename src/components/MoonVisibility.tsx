@@ -410,10 +410,6 @@ const MoonVisibility = () => {
       setDeviceHeading(null);
       return;
     }
-    
-    // Reset smoothing values when compass is enabled to prevent spinning back
-    smoothedHeadingRef.current = null;
-    cumulativeRotationRef.current = 0;
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
       let heading: number | null = null;
@@ -450,15 +446,8 @@ const MoonVisibility = () => {
           
           smoothedHeadingRef.current = (smoothedHeadingRef.current + delta * 0.08 + 360) % 360;
           
-          // Update cumulative rotation and normalize to prevent accumulation across multiple rotations
+          // Update cumulative rotation (not normalized, can exceed 360 or go negative)
           cumulativeRotationRef.current += delta * 0.08;
-          
-          // Normalize cumulative rotation to stay within -360 to 360 range
-          if (cumulativeRotationRef.current > 360) {
-            cumulativeRotationRef.current -= 360;
-          } else if (cumulativeRotationRef.current < -360) {
-            cumulativeRotationRef.current += 360;
-          }
         }
         
         setDeviceHeading(Math.round(smoothedHeadingRef.current));
