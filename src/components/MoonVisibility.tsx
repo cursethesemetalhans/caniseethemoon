@@ -428,7 +428,7 @@ const MoonVisibility = () => {
         // Add 90-degree offset and normalize to 0-360 range
         heading = heading % 360;
         
-        // Apply exponential moving average for smoothing (alpha = 0.15 for heavy smoothing)
+        // Apply exponential moving average for smoothing (alpha = 0.08 for very smooth movement)
         if (smoothedHeadingRef.current === null) {
           smoothedHeadingRef.current = heading;
           // Choose the shortest rotation path from 0
@@ -441,10 +441,13 @@ const MoonVisibility = () => {
           if (delta > 180) delta -= 360;
           if (delta < -180) delta += 360;
           
-          smoothedHeadingRef.current = (smoothedHeadingRef.current + delta * 0.15 + 360) % 360;
+          // Ignore very small changes (threshold of 0.5 degrees)
+          if (Math.abs(delta) < 0.5) return;
+          
+          smoothedHeadingRef.current = (smoothedHeadingRef.current + delta * 0.08 + 360) % 360;
           
           // Update cumulative rotation (not normalized, can exceed 360 or go negative)
-          cumulativeRotationRef.current += delta * 0.15;
+          cumulativeRotationRef.current += delta * 0.08;
         }
         
         setDeviceHeading(Math.round(smoothedHeadingRef.current));
