@@ -408,6 +408,8 @@ const MoonVisibility = () => {
   useEffect(() => {
     if (!orientationEnabled) {
       setDeviceHeading(null);
+      smoothedHeadingRef.current = null;
+      cumulativeRotationRef.current = 0;
       return;
     }
 
