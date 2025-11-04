@@ -644,7 +644,7 @@ const MoonVisibility = () => {
         </div>
 
         {/* Detail Dialogs */}
-        <Dialog open={openDialog === 'phase'} onOpenChange={() => setOpenDialog(null)}>
+        <Dialog open={openDialog === 'phase'} onOpenChange={() => { setOpenDialog(null); setOrientationEnabled(false); }}>
           <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -701,7 +701,7 @@ const MoonVisibility = () => {
           </DialogContent>
         </Dialog>
 
-        <Dialog open={openDialog === 'position'} onOpenChange={() => setOpenDialog(null)}>
+        <Dialog open={openDialog === 'position'} onOpenChange={() => { setOpenDialog(null); setOrientationEnabled(false); }}>
           <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center justify-between gap-2">
@@ -946,7 +946,7 @@ const MoonVisibility = () => {
           </DialogContent>
         </Dialog>
 
-        <Dialog open={openDialog === 'rise'} onOpenChange={() => setOpenDialog(null)}>
+        <Dialog open={openDialog === 'rise'} onOpenChange={() => { setOpenDialog(null); setOrientationEnabled(false); }}>
           <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -979,7 +979,7 @@ const MoonVisibility = () => {
           </DialogContent>
         </Dialog>
 
-        <Dialog open={openDialog === 'set'} onOpenChange={() => setOpenDialog(null)}>
+        <Dialog open={openDialog === 'set'} onOpenChange={() => { setOpenDialog(null); setOrientationEnabled(false); }}>
           <DialogContent className="bg-card/0 backdrop-blur border-border max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
