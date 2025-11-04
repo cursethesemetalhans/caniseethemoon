@@ -446,8 +446,15 @@ const MoonVisibility = () => {
           
           smoothedHeadingRef.current = (smoothedHeadingRef.current + delta * 0.08 + 360) % 360;
           
-          // Update cumulative rotation (not normalized, can exceed 360 or go negative)
+          // Update cumulative rotation and normalize to prevent accumulation across multiple rotations
           cumulativeRotationRef.current += delta * 0.08;
+          
+          // Normalize cumulative rotation to stay within -360 to 360 range
+          if (cumulativeRotationRef.current > 360) {
+            cumulativeRotationRef.current -= 360;
+          } else if (cumulativeRotationRef.current < -360) {
+            cumulativeRotationRef.current += 360;
+          }
         }
         
         setDeviceHeading(Math.round(smoothedHeadingRef.current));
