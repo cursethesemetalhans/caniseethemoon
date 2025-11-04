@@ -92,8 +92,8 @@ const MoonVisibility = () => {
     if (phase < 0.03 || phase > 0.97) return 'New Moon';
     if (phase < 0.22) return 'Waxing Crescent';
     if (phase < 0.28) return 'First Quarter';
-    if (phase < 0.47) return 'Waxing Gibbous';
-    if (phase < 0.53) return 'Full Moon';
+    if (phase < 0.46) return 'Waxing Gibbous';
+    if (phase < 0.54) return 'Full Moon';
     if (phase < 0.72) return 'Waning Gibbous';
     if (phase < 0.78) return 'Last Quarter';
     return 'Waning Crescent';
@@ -128,20 +128,20 @@ const MoonVisibility = () => {
     // First Quarter (0.25)
     if (phase < 0.28) return WiMoonFirstQuarter;
     
-    // Waxing Gibbous (0.28 - 0.47)
+    // Waxing Gibbous (0.28 - 0.46)
     if (phase < 0.31) return WiMoonWaxingGibbous1;
     if (phase < 0.34) return WiMoonWaxingGibbous2;
-    if (phase < 0.38) return WiMoonWaxingGibbous3;
-    if (phase < 0.41) return WiMoonWaxingGibbous4;
-    if (phase < 0.44) return WiMoonWaxingGibbous5;
-    if (phase < 0.47) return WiMoonWaxingGibbous6;
+    if (phase < 0.37) return WiMoonWaxingGibbous3;
+    if (phase < 0.40) return WiMoonWaxingGibbous4;
+    if (phase < 0.43) return WiMoonWaxingGibbous5;
+    if (phase < 0.46) return WiMoonWaxingGibbous6;
     
-    // Full Moon (0.50)
-    if (phase < 0.53) return WiMoonFull;
+    // Full Moon (0.46 - 0.54)
+    if (phase < 0.54) return WiMoonFull;
     
-    // Waning Gibbous (0.53 - 0.72)
-    if (phase < 0.56) return WiMoonWaningGibbous1;
-    if (phase < 0.59) return WiMoonWaningGibbous2;
+    // Waning Gibbous (0.54 - 0.72)
+    if (phase < 0.57) return WiMoonWaningGibbous1;
+    if (phase < 0.60) return WiMoonWaningGibbous2;
     if (phase < 0.63) return WiMoonWaningGibbous3;
     if (phase < 0.66) return WiMoonWaningGibbous4;
     if (phase < 0.69) return WiMoonWaningGibbous5;
